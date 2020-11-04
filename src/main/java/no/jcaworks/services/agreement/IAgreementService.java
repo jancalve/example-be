@@ -3,6 +3,8 @@ package no.jcaworks.services.agreement;
 import no.jcaworks.controllers.agreement.dto.CreateAgreementRequest;
 import no.jcaworks.controllers.agreement.dto.CreateAgreementResponse;
 
+import java.io.IOException;
+
 public interface IAgreementService {
 
     /**
@@ -11,6 +13,6 @@ public interface IAgreementService {
      * @param createAgreement containing parameters for creating agreement
      * @return response containing information about the created agreement
      */
-    CreateAgreementResponse createAgreement(CreateAgreementRequest createAgreement);
+    CreateAgreementResponse createAgreement(CreateAgreementRequest createAgreement) throws IOException;
 
 }
