@@ -2,10 +2,7 @@ package no.jcaworks.api.fagsystem;
 
 import no.jcaworks.api.fagsystem.dto.*;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Query;
+import retrofit2.http.*;
 
 public interface FagSystemResource {
 
@@ -16,6 +13,6 @@ public interface FagSystemResource {
     Call<CreateAgreementResponse> createAgreement(@Body CreateAgreementRequest createAgreementRequest);
 
     @PUT(("/agreement/{agreementId}"))
-    Call<UpdateAgreementResponse> updateAgreement(@Query("agreementId") String agreementId);
+    Call<UpdateAgreementResponse> updateAgreement(@Path("agreementId") String agreementId);
 
 }

@@ -1,8 +1,12 @@
 package no.jcaworks.api.brevtjeneste.dto;
 
-import lombok.Getter;
+import lombok.*;
 
-@Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 public class DispatchLetterResponse {
     // TODO What's this
     private String dispatchStatus;
