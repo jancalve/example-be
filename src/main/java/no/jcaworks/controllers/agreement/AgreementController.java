@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
+
 @Controller
 @ResponseBody
 @RequestMapping(value = "/agreement")
@@ -19,7 +21,7 @@ public class AgreementController {
     private AgreementService agreementService;
 
     @RequestMapping(method = RequestMethod.POST)
-    public CreateAgreementResponse create(@RequestBody CreateAgreementRequest createAgreementDao) {
+    public CreateAgreementResponse create(@RequestBody CreateAgreementRequest createAgreementDao) throws IOException {
         return agreementService.createAgreement(createAgreementDao);
 
     }

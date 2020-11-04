@@ -1,6 +1,10 @@
 package no.jcaworks.api.brevtjeneste.mock;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import no.jcaworks.api.brevtjeneste.dto.DispatchLetterRequest;
+import no.jcaworks.api.brevtjeneste.dto.DispatchLetterResponse;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
@@ -30,7 +34,7 @@ public class BrevTjeneste {
 
     private ClientAndServer mockServer;
 
-    public BrevTjeneste() {
+    public BrevTjeneste() throws JsonProcessingException {
         log.info("Starting mock server for {} ",  getClass().getSimpleName());
         mockServer = startClientAndServer(SERVER_PORT);
         log.info("Mock server for {} started",  getClass().getSimpleName());
@@ -45,17 +49,27 @@ public class BrevTjeneste {
         log.info("Mock server for {} shut down", getClass().getSimpleName());
     }
 
-    private void configureMock() {
+    private void configureMock() throws JsonProcessingException {
 
-        // Create customer
+        DispatchLetterRequest dispatchLetterRequest = DispatchLetterRequest.builder()
+            .firstName("Jan Christian")
+            .lastName("Alvestad")
+            .email("test@gmail.com")
+            .agreementId("555")
+            .build();
+
+        DispatchLetterResponse dispatchLetterResponse = DispatchLetterResponse.builder()
+                .dispatchStatus("SENT")
+                .build();
+
+        // Dispatch letter
         new MockServerClient(SERVER_HOST, SERVER_PORT)
                 .when(
                         request()
                                 .withMethod("POST")
-                                .withPath("/agreement")
+                                .withPath("/dispatch-letter")
                                 .withHeader("\"Content-type\", \"application/json\"")
-                                .withBody(exact("{firstName: 'Jan', lastName: 'Alvestad, email: 'jancalve@gmail.com', " +
-                                        "socialSecurityNumber: '111'}")),
+                                .withBody(exact(new ObjectMapper().writeValueAsString(dispatchLetterRequest))),
                         exactly(1))
                 .respond(
                         response()
@@ -63,7 +77,7 @@ public class BrevTjeneste {
                                 .withHeaders(
                                         new Header("Content-Type", "application/json; charset=utf-8"),
                                         new Header("Cache-Control", "public, max-age=86400"))
-                                .withBody("{ customerNumber: '555-666-777' }")
+                                .withBody(exact(new ObjectMapper().writeValueAsString(dispatchLetterResponse)))
                                 .withDelay(TimeUnit.SECONDS, 1)
                 );
     }

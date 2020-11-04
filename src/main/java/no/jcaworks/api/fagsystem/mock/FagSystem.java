@@ -1,5 +1,8 @@
 package no.jcaworks.api.fagsystem.mock;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import no.jcaworks.api.fagsystem.dto.*;
 import org.mockserver.client.server.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
 import org.mockserver.model.Header;
@@ -8,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
-
 import java.util.concurrent.TimeUnit;
 
 import static org.mockserver.integration.ClientAndServer.startClientAndServer;
@@ -30,7 +32,7 @@ public class FagSystem {
 
     private ClientAndServer mockServer;
 
-    public FagSystem() {
+    public FagSystem() throws JsonProcessingException {
         log.info("Starting mock server for {} ",  getClass().getSimpleName());
         mockServer = startClientAndServer(SERVER_PORT);
         configureMock();
@@ -45,7 +47,18 @@ public class FagSystem {
     }
 
 
-    private void configureMock() {
+    private void configureMock() throws JsonProcessingException {
+
+        CreateCustomerRequest createCustomerRequest = CreateCustomerRequest.builder()
+                .email("test@gmail.com")
+                .firstName("Jan Christian")
+                .lastName("Alvestad")
+                .socialSecurityNumber("123")
+                .build();
+
+        CreateCustomerResponse createCustomerResponse = CreateCustomerResponse.builder()
+                .customerNumber("456")
+                .build();
 
         // Create customer
         new MockServerClient(SERVER_HOST, SERVER_PORT)
@@ -54,8 +67,7 @@ public class FagSystem {
                                 .withMethod("POST")
                                 .withPath("/customer")
                                 .withHeader("\"Content-type\", \"application/json\"")
-                                .withBody(exact("{firstName: 'Jan', lastName: 'Alvestad, email: 'jancalve@gmail.com', " +
-                                        "socialSecurityNumber: '111'}")),
+                                .withBody(exact(new ObjectMapper().writeValueAsString(createCustomerRequest))),
                         exactly(1))
                 .respond(
                         response()
@@ -63,9 +75,19 @@ public class FagSystem {
                                 .withHeaders(
                                         new Header("Content-Type", "application/json; charset=utf-8"),
                                         new Header("Cache-Control", "public, max-age=86400"))
-                                .withBody("{ customerNumber: '555-666-777' }")
+                                .withBody(new ObjectMapper().writeValueAsString(createCustomerResponse))
                                 .withDelay(TimeUnit.SECONDS,1)
                 );
+
+        CreateAgreementRequest createAgreementRequest = CreateAgreementRequest.builder()
+                .vehicleRegistrationNumber("CV95432")
+                .bonus(30)
+                .customerNumber("456")
+                .build();
+
+        CreateAgreementResponse createAgreementResponse = CreateAgreementResponse.builder()
+                .agreementId("555")
+                .build();
 
         // Create agreement
         new MockServerClient(SERVER_HOST, SERVER_PORT)
@@ -74,7 +96,7 @@ public class FagSystem {
                                 .withMethod("POST")
                                 .withPath("/agreement")
                                 .withHeader("\"Content-type\", \"application/json\"")
-                                .withBody(exact("{socialSecurityNumber: '123', vehicleRegistrationNumber: 'CV95523', bonus: '30'}")),
+                                .withBody(exact(new ObjectMapper().writeValueAsString(createAgreementRequest))),
                         exactly(1))
                 .respond(
                         response()
@@ -82,18 +104,21 @@ public class FagSystem {
                                 .withHeaders(
                                         new Header("Content-Type", "application/json; charset=utf-8"),
                                         new Header("Cache-Control", "public, max-age=86400"))
-                                .withBody("{ agreementNumber: '555-666-777', status: 'PENDING'}")
+                                .withBody(new ObjectMapper().writeValueAsString(createAgreementResponse))
                                 .withDelay(TimeUnit.SECONDS,1)
                 );
+
+        UpdateAgreementResponse updateAgreementResponse = UpdateAgreementResponse.builder()
+                .agreementStatus("ACTIVE")
+                .build();
 
         // Activate agreement
         new MockServerClient(SERVER_HOST, SERVER_PORT)
                 .when(
                         request()
-                                .withMethod("POST")
-                                .withPath("/agreement/555-666-777/activate")
-                                .withHeader("\"Content-type\", \"application/json\"")
-                                .withBody(exact("{agreementNumber: '555-666-777'}")),
+                                .withMethod("PUT")
+                                .withPath("/agreement/555")
+                                .withHeader("\"Content-type\", \"application/json\""),
                         exactly(1))
                 .respond(
                         response()
@@ -101,7 +126,7 @@ public class FagSystem {
                                 .withHeaders(
                                         new Header("Content-Type", "application/json; charset=utf-8"),
                                         new Header("Cache-Control", "public, max-age=86400"))
-                                .withBody("{ agreementNumber: '555-666-777', status: 'ACTIVE'}")
+                                .withBody(new ObjectMapper().writeValueAsString(updateAgreementResponse))
                                 .withDelay(TimeUnit.SECONDS,1)
                 );
     }
