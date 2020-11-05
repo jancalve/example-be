@@ -32,7 +32,7 @@ public class BrevTjeneste {
     private static final String SERVER_HOST = "127.0.0.1";
 
 
-    private ClientAndServer mockServer;
+    private final ClientAndServer mockServer;
 
     public BrevTjeneste() throws JsonProcessingException {
         log.info("Starting mock server for {} ",  getClass().getSimpleName());
@@ -67,7 +67,7 @@ public class BrevTjeneste {
                 .when(
                         request()
                                 .withMethod("POST")
-                                .withPath("/dispatch-letter")
+                                .withPath(".*/dispatch-letter")
                                 .withHeader("\"Content-type\", \"application/json\"")
                                 .withBody(exact(new ObjectMapper().writeValueAsString(dispatchLetterRequest))),
                         exactly(1))

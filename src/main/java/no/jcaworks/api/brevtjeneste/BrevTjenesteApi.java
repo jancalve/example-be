@@ -25,7 +25,7 @@ public class BrevTjenesteApi implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         httpClient = new OkHttpClient.Builder();
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://" + host + ":" + port)

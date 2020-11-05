@@ -30,7 +30,7 @@ public class FagSystem {
     private static final int SERVER_PORT = 1087;
     private static final String SERVER_HOST = "127.0.0.1";
 
-    private ClientAndServer mockServer;
+    private final ClientAndServer mockServer;
 
     public FagSystem() throws JsonProcessingException {
         log.info("Starting mock server for {} ",  getClass().getSimpleName());
@@ -65,7 +65,7 @@ public class FagSystem {
                 .when(
                         request()
                                 .withMethod("POST")
-                                .withPath("/customer")
+                                .withPath(".*/customer")
                                 .withHeader("\"Content-type\", \"application/json\"")
                                 .withBody(exact(new ObjectMapper().writeValueAsString(createCustomerRequest))),
                         exactly(1))
@@ -94,7 +94,7 @@ public class FagSystem {
                 .when(
                         request()
                                 .withMethod("POST")
-                                .withPath("/agreement")
+                                .withPath(".*/agreement")
                                 .withHeader("\"Content-type\", \"application/json\"")
                                 .withBody(exact(new ObjectMapper().writeValueAsString(createAgreementRequest))),
                         exactly(1))
@@ -117,7 +117,7 @@ public class FagSystem {
                 .when(
                         request()
                                 .withMethod("PUT")
-                                .withPath("/agreement/555")
+                                .withPath(".*/agreement/555")
                                 .withHeader("\"Content-type\", \"application/json\""),
                         exactly(1))
                 .respond(

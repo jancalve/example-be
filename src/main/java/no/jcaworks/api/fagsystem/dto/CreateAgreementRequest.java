@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateAgreementRequest {
-
     private String vehicleRegistrationNumber;
     private Integer bonus;
     private String customerNumber;
