@@ -1,9 +1,6 @@
 package no.jcaworks.controllers.agreement.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * Response object for create agreement
@@ -14,6 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Data
 @ToString
+@Builder
 public class CreateAgreementResponse {
     private String agreementId;
     private String agreementStatus;

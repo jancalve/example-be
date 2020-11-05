@@ -2,6 +2,7 @@ package no.jcaworks.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.jcaworks.controllers.agreement.dto.CreateAgreementRequest;
+import no.jcaworks.controllers.agreement.dto.CreateAgreementResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -36,12 +38,17 @@ class AgreementServiceIntegrationTest {
                 .vehicleRegistrationNumber("CV95432")
                 .build();
 
-
+        CreateAgreementResponse expectedResponse = CreateAgreementResponse.builder()
+                .agreementId("555")
+                .agreementStatus("ACTIVE")
+                .build();
 
         mockMvc.perform(post("/agreement", 42L)
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(expectedResponse)));
+
     }
 
 }
