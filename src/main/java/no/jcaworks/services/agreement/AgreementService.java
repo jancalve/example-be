@@ -5,6 +5,7 @@ import no.jcaworks.api.brevtjeneste.dto.DispatchLetterRequest;
 import no.jcaworks.api.fagsystem.FagSystemResource;
 import no.jcaworks.api.fagsystem.dto.CreateCustomerRequest;
 import no.jcaworks.api.fagsystem.dto.CreateCustomerResponse;
+import no.jcaworks.api.fagsystem.dto.UpdateAgreementResponse;
 import no.jcaworks.controllers.agreement.dto.CreateAgreementRequest;
 import no.jcaworks.controllers.agreement.dto.CreateAgreementResponse;
 import no.jcaworks.exceptions.TransactionException;
@@ -79,7 +80,7 @@ public class AgreementService implements IAgreementService {
             throw new TransactionException(transactionId, "Failed to dispatch letter " + dispatchLetterRequest.toString() + " in transaction " + transactionId, e);
         }
 
-        no.jcaworks.api.fagsystem.dto.UpdateAgreementResponse updateAgreementResponse;
+        UpdateAgreementResponse updateAgreementResponse;
         try {
             updateAgreementResponse = fagSystemResource.prepareUpdateAgreement(transactionId, createAgreementResponse.getAgreementId())
             .execute()
