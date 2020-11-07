@@ -34,7 +34,7 @@ class AgreementServiceIntegrationTest {
                 .email("test@gmail.com")
                 .firstName("Jan Christian")
                 .lastName("Alvestad")
-                .socialSecurityNumber("123")
+                .socialSecurityNumber("12345678911")
                 .vehicleRegistrationNumber("CV95432")
                 .build();
 

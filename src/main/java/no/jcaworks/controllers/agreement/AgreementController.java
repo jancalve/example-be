@@ -21,6 +21,7 @@ public class AgreementController {
     @Autowired
     private AgreementService agreementService;
 
+    @CrossOrigin(origins = "*") // Purely for running this example with frontend hosted locally
     @RequestMapping(method = RequestMethod.POST)
     public CreateAgreementResponse create(@RequestBody CreateAgreementRequest createAgreementDao) {
         return agreementService.createAgreement(createAgreementDao);
