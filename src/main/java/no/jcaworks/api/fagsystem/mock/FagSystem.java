@@ -53,7 +53,7 @@ public class FagSystem {
                 .email("test@gmail.com")
                 .firstName("Jan Christian")
                 .lastName("Alvestad")
-                .socialSecurityNumber("123")
+                .socialSecurityNumber("12345678911")
                 .build();
 
         CreateCustomerResponse createCustomerResponse = CreateCustomerResponse.builder()
@@ -68,7 +68,7 @@ public class FagSystem {
                                 .withPath(".*/customer")
                                 .withHeader("\"Content-type\", \"application/json\"")
                                 .withBody(exact(new ObjectMapper().writeValueAsString(createCustomerRequest))),
-                        exactly(1))
+                        exactly(10))
                 .respond(
                         response()
                                 .withStatusCode(200)
@@ -97,7 +97,7 @@ public class FagSystem {
                                 .withPath(".*/agreement")
                                 .withHeader("\"Content-type\", \"application/json\"")
                                 .withBody(exact(new ObjectMapper().writeValueAsString(createAgreementRequest))),
-                        exactly(1))
+                        exactly(10))
                 .respond(
                         response()
                                 .withStatusCode(200)
@@ -119,7 +119,7 @@ public class FagSystem {
                                 .withMethod("PUT")
                                 .withPath(".*/agreement/555")
                                 .withHeader("\"Content-type\", \"application/json\""),
-                        exactly(1))
+                        exactly(10))
                 .respond(
                         response()
                                 .withStatusCode(201)

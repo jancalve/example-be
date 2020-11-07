@@ -70,7 +70,7 @@ public class BrevTjeneste {
                                 .withPath(".*/dispatch-letter")
                                 .withHeader("\"Content-type\", \"application/json\"")
                                 .withBody(exact(new ObjectMapper().writeValueAsString(dispatchLetterRequest))),
-                        exactly(1))
+                        exactly(10))
                 .respond(
                         response()
                                 .withStatusCode(200)
